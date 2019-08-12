@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare environment') {
+            steps {
+              apt-get install -y eksctl
+              apt-get install -y awscli
+                aws configure set aws_access_key_id [KEY-ID]
+              aws configure set aws_secret_access_key [Secret-AccessKey]
+              aws configure set default.region us-east-2
+            }
+        }
+        stage('Provision Kubernetes Cluster') {
+            steps {
+              eksctl create cluster --name wp --version 1.00 --nodegroup-name standard-workers --node-type t2.micro --nodes 4 --nodes-min 1 --nodes-max 8 --node-ami auto --region us-east-2
+            }
+        }
+        stage('Deploy MySQL and Wordpress Containers') {
+            steps {
+                kubectl apply -k ./
+            }
+        }
+        stage('Configure ReplicaSet and AutoScaling') {
+            steps {
+              kubectl autoscale deployment.v1.apps/wordpress --min=2 --max=3 --cpu-percent=80
+            }
+        }
+    }
+}
+A

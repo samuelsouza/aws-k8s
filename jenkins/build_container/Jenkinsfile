@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Create Container from DockerFile') {
+            steps {
+              docker build -t samucasouza/wordpress .
+            }
+        }
+        stage('upload image to dockerHub') {
+            steps {
+                docker push samucasouza/wordpress
+            }
+        }
+    }
+}
