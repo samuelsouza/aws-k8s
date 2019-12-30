@@ -1,7 +1,7 @@
 # Wordpress + Jenkins + Kubernetes + Terraform
 The repository contains a Jenkins server that generates a Wordpress container an pushes it to Docker Registry. There is another pipeline where an Amazon EKS cluster is provisioned with 4 nodes. Than the Wordpress and MySQL containers are deployed using a kubernetes kustomization file. The last step is where the autoscaling is enabled, deploying one extra pod for redundancy and deploying extras when the CPU reaches an 80% threshold. The data is stored in a persistent volume and the Wordpress deployment is LoadBalancer
 
-### Overall image os the solution
+### Overall solution
 ![Solution](solution.png)
 
 ### Automatic Jenkins provisioning at AWS
